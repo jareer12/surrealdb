@@ -3,23 +3,18 @@
     "target": "ES6",
     "module": "Node16",
     "strict": true,
+    "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
     "outDir": "./lib",
-    "noEmit": true,
-    "typeRoots": [
-      "./lib/index.d.ts"
-    ],
   },
   "exclude": [
-    "node_modules",
+    "./node_modules",
   ],
   "include": [
-    "*",
     "./*.*",
-    "./*/*.*",
+    "./src/*.*",
   ]
 }

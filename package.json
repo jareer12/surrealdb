@@ -1,9 +1,9 @@
 {
   "name": "surrealdb.js2",
-  "version": "0.0.1-alpha.1.6",
-  "main": "lib/src/index.js",
+  "version": "0.0.1-alpha.1.7",
+  "main": "src/index.js",
   "description": "SureralDB REST API wrapper.",
-  "types": "lib",
+  "types": "src/index.d.ts",
   "license": "MIT",
   "files": [
     "lib"
@@ -18,11 +18,11 @@
     "type": "git"
   },
   "devDependencies": {
-    "@types/node": "^18.7.18",
     "@types/node-fetch": "^2.6.2"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
-    "surrealdb.js2": "^0.0.1-alpha.1"
+    "surrealdb.js2": "^0.0.1-alpha.1.6",
+    "typescript": "^4.8.3"
   }
 }
