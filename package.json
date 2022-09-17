@@ -1,13 +1,10 @@
 {
   "name": "surrealdb.js2",
-  "version": "0.0.1-alpha.1.8",
+  "version": "0.0.1-alpha.1.9",
   "main": "lib/src/index.js",
   "description": "SureralDB REST API wrapper.",
   "types": "src/index.d.ts",
   "license": "MIT",
-  "files": [
-    "lib"
-  ],
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc --watch",
