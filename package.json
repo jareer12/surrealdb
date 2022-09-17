@@ -4,6 +4,10 @@
   "main": "./lib/src/index.js",
   "description": "SureralDB REST API wrapper.",
   "license": "MIT",
+  "files": [
+    "./lib/src",
+    "./lib/utils"
+  ],
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc --watch",
