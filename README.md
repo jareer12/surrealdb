@@ -4,6 +4,8 @@
 npm i surreal.js2
 ```
 
+## Quick Start
+
 ```ts
 import SurrealDB from 'surrealdb.js2'
 
@@ -15,14 +17,12 @@ const Surreal = new SurrealDB('http://127.0.0.1:8000', {
 })
 ```
 
+## Guide
+
 ```ts
-async function main() {
-  const Output = await Surreal.Query(
-    `CREATE company:surrealdb SET name = 'SurrealDB', cofounders = [person:tobie, person:jaime];`,
-  )
+const Output = await Surreal.Query(
+  `CREATE company:surrealdb SET name = 'SurrealDB', cofounders = [person:tobie, person:jaime];`,
+)
 
-  console.log(Output)
-}
-
-main()
+console.log(Output)
 ```
