@@ -5,6 +5,7 @@
     "strict": true,
     "sourceMap": true,
     "declaration": true,
+    "declarationDir": "./types",
     "declarationMap": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
