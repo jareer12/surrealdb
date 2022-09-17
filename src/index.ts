@@ -38,14 +38,7 @@ class SurrealDB {
       fetch(`${this.url}/sql`, {
         body: query,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Basic ${btoa(
-            `${this.options.user}:${this.options.pass}`,
-          )}`,
-          Db: this.options.database,
-          Ns: this.options.namespace,
-        },
+        headers: this.CreateHeaders(),
       })
         .then((res) => res.json())
         .then((data: any) => {
