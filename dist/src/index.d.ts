@@ -1,4 +1,4 @@
-import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../types/index.js';
+import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../index';
 declare class SurrealDB {
     url: string;
     options: SurrealConfigs;

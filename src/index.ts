@@ -1,9 +1,5 @@
 import fetch from 'node-fetch'
-import {
-  SurrealResponse,
-  SurrealConfigs,
-  UnauthorizedResponse,
-} from '../types/index.js'
+import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../index'
 
 class SurrealDB {
   url: string

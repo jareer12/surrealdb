@@ -5,6 +5,9 @@
   "description": "SureralDB REST API wrapper.",
   "types": "dist",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc --watch",
