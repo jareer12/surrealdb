@@ -1,5 +1,25 @@
 import fetch from 'node-fetch'
-import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../index'
+
+export interface SurrealConfigs {
+  user: string
+  pass: string
+  namespace: string
+  database: string
+}
+
+export interface SurrealResponse {
+  time: string
+  status: 'ERR' | 'OK'
+  detail: string
+  result: any[]
+}
+
+export interface UnauthorizedResponse {
+  code: number
+  details: string
+  description: string
+  information: string
+}
 
 class SurrealDB {
   private url: string
