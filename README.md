@@ -1,13 +1,13 @@
 # SurrealDB Node.js
 
 ```shell
-npm i surreal.js2
+npm i surrealdb
 ```
 
 ## Quick Start
 
 ```ts
-import SurrealDB from 'surrealdb.js2'
+import SurrealDB from 'surrealdb'
 
 const Surreal = new SurrealDB('http://127.0.0.1:8000', {
   user: 'root',
