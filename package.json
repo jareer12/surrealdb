@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
-    "surrealdb.js2": "^0.0.1-alpha.1.6",
+    "surrealdb.js2": "^0.0.1-alpha.2.1",
     "typescript": "^4.8.3"
   }
 }
