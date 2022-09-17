@@ -3,17 +3,16 @@
     "target": "ES6",
     "module": "Node16",
     "strict": true,
-    "baseUrl": "./",
-    "typeRoots": [
-      "./@types/index.d.ts"
-    ],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
     "outDir": "./lib",
-    "noEmit": true
+    "noEmit": true,
+    "typeRoots": [
+      "./lib/index.d.ts"
+    ],
   },
   "exclude": [
     "node_modules",
