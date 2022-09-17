@@ -1,5 +1,3 @@
-declare module 'surrealdb.js2'
-
 export interface SurrealConfigs {
   user: string
   pass: string
