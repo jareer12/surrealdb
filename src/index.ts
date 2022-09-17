@@ -34,10 +34,6 @@ class SurrealDB {
     return Buffer.from(string).toString('base64')
   }
 
-  private decodeBase64 = (string: string) => {
-    return Buffer.from(string, 'base64').toString('ascii')
-  }
-
   private CreateAuth() {
     return `Basic ${this.encodeBase64(
       `${this.options.user}:${this.options.pass}`,
@@ -51,6 +47,12 @@ class SurrealDB {
       Db: this.options.database,
       Ns: this.options.namespace,
     }
+  }
+
+  Use(namespace: string, database: string) {
+    this.options.namespace = namespace
+    this.options.database = database
+    return true
   }
 
   Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
@@ -74,6 +76,22 @@ class SurrealDB {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}`, {
         method: 'GET',
+        headers: this.CreateHeaders(),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  ClearTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}`, {
+        method: 'DELETE',
         headers: this.CreateHeaders(),
       })
         .then((res) => res.json())
