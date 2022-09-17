@@ -30,11 +30,11 @@ class SurrealDB {
     this.options = options
   }
 
-  private encodeBase64 = (string: string) => {
+  private encodeBase64 = (string: string): string => {
     return Buffer.from(string).toString('base64')
   }
 
-  private CreateAuth() {
+  private CreateAuth(): string {
     return `Basic ${this.encodeBase64(
       `${this.options.user}:${this.options.pass}`,
     )}`
@@ -58,8 +58,48 @@ class SurrealDB {
   Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/sql`, {
-        body: query,
         method: 'POST',
+        headers: this.CreateHeaders(),
+        body: query,
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  GetRecord(
+    table: string,
+    id: string,
+  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}/${id}`, {
+        method: 'GET',
+        headers: this.CreateHeaders(),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  CreateRecord(
+    table: string,
+    id: string,
+    data: { [key: string]: any },
+  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}/${id}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
         headers: this.CreateHeaders(),
       })
         .then((res) => res.json())

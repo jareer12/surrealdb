@@ -25,6 +25,10 @@ declare class SurrealDB {
     private CreateHeaders;
     Use(namespace: string, database: string): boolean;
     Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
+    GetRecord(table: string, id: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
+    CreateRecord(table: string, id: string, data: {
+        [key: string]: any;
+    }): Promise<SurrealResponse[] | UnauthorizedResponse>;
     GetTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
     ClearTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
 }
