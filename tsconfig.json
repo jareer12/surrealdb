@@ -12,7 +12,8 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
-    "outDir": "./dist"
+    "outDir": "./lib",
+    "noEmit": true
   },
   "exclude": [
     "node_modules",

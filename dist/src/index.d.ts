@@ -1,7 +1,7 @@
 import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../index';
 declare class SurrealDB {
-    url: string;
-    options: SurrealConfigs;
+    private url;
+    private options;
     constructor(url: string, options: SurrealConfigs);
     private encodeBase64;
     private decodeBase64;

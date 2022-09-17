@@ -2,8 +2,8 @@ import fetch from 'node-fetch'
 import { SurrealResponse, SurrealConfigs, UnauthorizedResponse } from '../index'
 
 class SurrealDB {
-  url: string
-  options: SurrealConfigs
+  private url: string
+  private options: SurrealConfigs
 
   constructor(url: string, options: SurrealConfigs) {
     this.url = url

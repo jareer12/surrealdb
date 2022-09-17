@@ -1,17 +1,17 @@
 {
   "name": "surrealdb.js2",
   "version": "0.0.1-alpha.1.6",
-  "main": "dist/src/index.js",
+  "main": "lib/src/index.js",
   "description": "SureralDB REST API wrapper.",
-  "types": "dist",
+  "types": "lib",
   "license": "MIT",
   "files": [
-    "dist"
+    "lib"
   ],
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc --watch",
-    "test": "node ./dist/test/index.js"
+    "test": "node ./lib/test/index.js"
   },
   "repository": {
     "url": "https://github.com/jareer12/surreal",
