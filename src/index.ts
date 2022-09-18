@@ -182,7 +182,7 @@ class SurrealQueryBuilder {
   query: string = ''
   constructor() {}
 
-  private StrinigfyObject(value: any) {
+  private StringifyObject(value: any) {
     let toStr = ''
     const keys = Object.keys(value)
 
@@ -209,7 +209,7 @@ class SurrealQueryBuilder {
         return value
       }
       case 'object': {
-        return this.StrinigfyObject(value)
+        return this.StringifyObject(value)
       }
       case 'default': {
         return value
@@ -217,7 +217,7 @@ class SurrealQueryBuilder {
       case 'array': {
         return `[${value.map((val: any) => {
           if (typeof val == 'object') {
-            return `${this.StrinigfyObject(val)}`
+            return `${this.StringifyObject(val)}`
           } else {
             return `${this.StringifyValue(
               val,

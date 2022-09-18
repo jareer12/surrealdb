@@ -42,7 +42,7 @@ declare class SurrealDB {
 declare class SurrealQueryBuilder {
     query: string;
     constructor();
-    private StrinigfyObject;
+    private StringifyObject;
     private StringifyValue;
     private StringifyType;
     AppendCreate(name: string, keys: {

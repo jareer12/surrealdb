@@ -1,6 +1,6 @@
 {
   "name": "surrealdb",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "main": "./lib/src/index.js",
   "description": "SureralDB REST API wrapper.",
   "license": "MIT",
@@ -9,11 +9,11 @@
   ],
   "scripts": {
     "build": "tsc -p .",
-    "watch": "tsc --watch",
+    "dev": "tsc --watch",
     "test": "node ./lib/test/index.js"
   },
   "repository": {
-    "url": "https://github.com/jareer12/surreal",
+    "url": "https://github.com/jareer12/surrealdb",
     "type": "git"
   },
   "devDependencies": {
