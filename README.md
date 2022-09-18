@@ -46,37 +46,50 @@ Surreal.Query(
 import { SurrealQueryBuilder } from 'surrealdb'
 
 const SQB = new SurrealQueryBuilder()
-const Query = SQB.AppendCreate('user', [
-  {
-    key: 'name',
-    type: 'string',
-    value: 'John',
-  },
-  {
-    key: 'age',
-    type: 'int',
-    value: 18,
-  },
-  {
-    key: 'friends',
-    type: 'array',
-    value: [
+    .DefineParam('username', 'John Doe')
+    .AppendCreate('user', [
       {
-        name: 'James',
-        age: 17,
+        key: 'name',
+        type: 'default',
+        value: '$username',
       },
       {
-        name: 'Bob',
-        age: 18,
+        key: 'age',
+        type: 'int',
+        value: 18,
       },
-    ],
-  },
-])
+      {
+        key: 'friends',
+        type: 'array',
+        value: [
+          {
+            name: 'James',
+            age: 17,
+          },
+          {
+            name: 'Bob',
+            age: 18,
+          },
+        ],
+      },
+    ])
+    .WrapTransaction('COMMIT')
+
+console.log(SQB.query) // OR SQB.Finalize()
 ```
 
 ```sql
-CREATE user SET name = <string> 'John', age = <int> 18, friends = [ 
-  { name: 'James', age: 17 },
-  { name: 'Bob', age: 18 } 
+BEGIN TRANSACTION;
+LET $username = 'John Doe';
+CREATE user SET name = $username, age = <int> 18, friends = [
+  {
+    name: 'James',
+    age: 17
+  },
+  {
+    name: 'Bob',
+    age: 18
+  }
 ];
+COMMIT TRANSACTION;
 ```

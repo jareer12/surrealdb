@@ -8,7 +8,7 @@ export interface SurrealResponse {
     time: string;
     status: 'ERR' | 'OK';
     detail: string;
-    result: any[];
+    result: any[] | null;
 }
 export interface UnauthorizedResponse {
     code: number;
@@ -19,6 +19,7 @@ export interface UnauthorizedResponse {
 export interface AnyObject {
     [key: string]: any;
 }
+export declare type SurrealTypesRaw = string | number | object | any[];
 export declare type SurrealTypes = 'string' | 'int' | 'float' | 'object' | 'array' | 'default';
 declare class SurrealDB {
     private url;
@@ -28,16 +29,16 @@ declare class SurrealDB {
     private CreateAuth;
     private CreateHeaders;
     Use(namespace: string, database: string): boolean;
-    Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
-    GetRecord(table: string, id: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
+    Query(query: string): Promise<SurrealResponse[]>;
+    GetRecord(table: string, id: string): Promise<SurrealResponse[]>;
     CreateRecord(table: string, id: string, data: {
         [key: string]: any;
-    }): Promise<SurrealResponse[] | UnauthorizedResponse>;
+    }): Promise<SurrealResponse[]>;
     UpdateRecord(table: string, id: string, data: {
         [key: string]: any;
-    }): Promise<SurrealResponse[] | UnauthorizedResponse>;
-    GetTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
-    ClearTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
+    }): Promise<SurrealResponse[]>;
+    GetTable(table: string): Promise<SurrealResponse[]>;
+    ClearTable(table: string): Promise<SurrealResponse[]>;
 }
 declare class SurrealQueryBuilder {
     query: string;
@@ -45,11 +46,15 @@ declare class SurrealQueryBuilder {
     private StringifyObject;
     private StringifyValue;
     private StringifyType;
+    private TypeToSurreal;
+    DefineParam(key: string, value: SurrealTypesRaw): this;
     AppendCreate(name: string, keys: {
         key: string;
         type?: SurrealTypes;
         value: object | string | number | SurrealTypes[];
-    }[]): string;
+    }[]): this;
+    WrapTransaction(type: 'COMMIT' | 'CANCLE'): this;
+    Finalize(): string;
 }
 export default SurrealDB;
 export { SurrealQueryBuilder };

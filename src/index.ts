@@ -1,3 +1,4 @@
+const stringify = require('stringify-object')
 import fetch from 'node-fetch'
 
 export interface SurrealConfigs {
@@ -11,7 +12,7 @@ export interface SurrealResponse {
   time: string
   status: 'ERR' | 'OK'
   detail: string
-  result: any[]
+  result: any[] | null
 }
 
 export interface UnauthorizedResponse {
@@ -24,6 +25,8 @@ export interface UnauthorizedResponse {
 export interface AnyObject {
   [key: string]: any
 }
+
+export type SurrealTypesRaw = string | number | object | any[]
 
 export type SurrealTypes =
   | 'string'
@@ -67,7 +70,7 @@ class SurrealDB {
     return true
   }
 
-  Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  Query(query: string): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/sql`, {
         method: 'POST',
@@ -84,10 +87,7 @@ class SurrealDB {
     })
   }
 
-  GetRecord(
-    table: string,
-    id: string,
-  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  GetRecord(table: string, id: string): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}/${id}`, {
         method: 'GET',
@@ -107,7 +107,7 @@ class SurrealDB {
     table: string,
     id: string,
     data: { [key: string]: any },
-  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  ): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}/${id}`, {
         method: 'POST',
@@ -128,7 +128,7 @@ class SurrealDB {
     table: string,
     id: string,
     data: { [key: string]: any },
-  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  ): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}/${id}`, {
         method: 'PATCH',
@@ -145,7 +145,7 @@ class SurrealDB {
     })
   }
 
-  GetTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  GetTable(table: string): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}`, {
         method: 'GET',
@@ -161,7 +161,7 @@ class SurrealDB {
     })
   }
 
-  ClearTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse> {
+  ClearTable(table: string): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}`, {
         method: 'DELETE',
@@ -183,21 +183,23 @@ class SurrealQueryBuilder {
   constructor() {}
 
   private StringifyObject(value: any) {
-    let toStr = ''
-    const keys = Object.keys(value)
+    return stringify(value, {
+      indent: '  ',
+    })
+    // let toStr = ''
+    // const keys = Object.keys(value)
 
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const val = value[key]
-      if (value.hasOwnProperty(key)) {
-        toStr +=
-          `${i > 0 === true ? ' ' : ''}${key}: ${this.StringifyValue(
-            value[key],
-            typeof value[key] == 'string' ? 'string' : 'default',
-          )}` + `${i < keys.length - 1 ? ',' : ''}`
-      }
-    }
-    return `{ ${toStr} }`
+    // for (let i = 0; i < keys.length; i++) {
+    //   const key = keys[i]
+    //   if (value.hasOwnProperty(key)) {
+    //     toStr +=
+    //       `${i > 0 === true ? ' ' : ''}${key}: ${this.StringifyValue(
+    //         value[key],
+    //         typeof value[key] == 'string' ? 'string' : 'default',
+    //       )}` + `${i < keys.length - 1 ? ',' : ''}`
+    //   }
+    // }
+    // return `{ ${toStr} }`
   }
 
   private StringifyValue(value: any, type: SurrealTypes = 'default') {
@@ -237,10 +239,43 @@ class SurrealQueryBuilder {
       case 'array': {
         return ''
       }
+      case 'default': {
+        return ''
+      }
       default: {
         return key.type != null ? `<${key.type}> ` : ''
       }
     }
+  }
+
+  private TypeToSurreal(type: any, isArray: boolean = false) {
+    switch (type) {
+      case 'number': {
+        return 'int'
+      }
+      case 'string': {
+        return 'string'
+      }
+      case 'object': {
+        if (isArray == true) {
+          return 'array'
+        } else {
+          return 'object'
+        }
+      }
+      default: {
+        return 'default'
+      }
+    }
+  }
+
+  DefineParam(key: string, value: SurrealTypesRaw) {
+    this.query += `LET $${key} = ${this.StringifyValue(
+      value,
+      this.TypeToSurreal(typeof value),
+    )};`
+
+    return this
   }
 
   AppendCreate(
@@ -251,7 +286,7 @@ class SurrealQueryBuilder {
       value: object | string | number | SurrealTypes[]
     }[],
   ) {
-    this.query = `CREATE ${name} SET`
+    this.query += `\nCREATE ${name} SET`
 
     for (let x = 0; x < keys.length; x++) {
       const key = keys[x]
@@ -262,7 +297,17 @@ class SurrealQueryBuilder {
       }`
     }
 
-    return `${this.query};`
+    this.query = `${this.query};`
+    return this
+  }
+
+  WrapTransaction(type: 'COMMIT' | 'CANCLE') {
+    this.query = `BEGIN TRANSACTION;\n${this.query}\n${type} TRANSACTION;`
+    return this
+  }
+
+  Finalize() {
+    return this.query
   }
 }
 
