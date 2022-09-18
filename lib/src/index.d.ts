@@ -48,6 +48,8 @@ declare class SurrealQueryBuilder {
     private StringifyType;
     private TypeToSurreal;
     DefineParam(key: string, value: SurrealTypesRaw): this;
+    UseNamespace(namespace: string): this;
+    UseDatabase(database: string): this;
     AppendCreate(name: string, keys: {
         key: string;
         type?: SurrealTypes;

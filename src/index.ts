@@ -278,6 +278,16 @@ class SurrealQueryBuilder {
     return this
   }
 
+  UseNamespace(namespace: string) {
+    this.query = `${this.query}\nUSE NS ${namespace};`
+    return this
+  }
+
+  UseDatabase(database: string) {
+    this.query = `${this.query}\nUSE DB ${database};`
+    return this
+  }
+
   AppendCreate(
     name: string,
     keys: {
