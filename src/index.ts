@@ -63,6 +63,7 @@ class SurrealDB {
       query = query.replace(`$${key}`, JSON.stringify(val))
     }
 
+    console.log(query)
     return query
   }
 
