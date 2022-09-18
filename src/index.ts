@@ -21,6 +21,10 @@ export interface UnauthorizedResponse {
   information: string
 }
 
+export interface AnyObject {
+  [key: string]: any
+}
+
 class SurrealDB {
   private url: string
   private options: SurrealConfigs
@@ -30,7 +34,7 @@ class SurrealDB {
     this.options = options
   }
 
-  private encodeBase64 = (string: string): string => {
+  private encodeBase64(string: string): string {
     return Buffer.from(string).toString('base64')
   }
 
@@ -49,6 +53,19 @@ class SurrealDB {
     }
   }
 
+  private PurifyQuery(query: string, params: AnyObject = {}) {
+    const keys = Object.keys(params)
+
+    for (let x = 0; x < keys.length; x++) {
+      const key = keys[x]
+      const val = params[key]
+
+      query = query.replace(`$${key}`, JSON.stringify(val))
+    }
+
+    return query
+  }
+
   Use(namespace: string, database: string) {
     this.options.namespace = namespace
     this.options.database = database
@@ -64,6 +81,21 @@ class SurrealDB {
       })
         .then((res) => res.json())
         .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  QueryF(
+    query: string,
+    params: AnyObject = {},
+  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+    return new Promise((res, rej) => {
+      this.Query(this.PurifyQuery(query, params))
+        .then((data) => {
           res(data)
         })
         .catch((err) => {
@@ -99,6 +131,27 @@ class SurrealDB {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}/${id}`, {
         method: 'POST',
+        body: JSON.stringify(data),
+        headers: this.CreateHeaders(),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  UpdateRecord(
+    table: string,
+    id: string,
+    data: { [key: string]: any },
+  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}/${id}`, {
+        method: 'PATCH',
         body: JSON.stringify(data),
         headers: this.CreateHeaders(),
       })

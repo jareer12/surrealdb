@@ -6,6 +6,10 @@ npm i surrealdb
 
 ## Quick Start
 
+```sh
+surreal start --root user --pass user
+```
+
 ```ts
 import SurrealDB from 'surrealdb'
 
