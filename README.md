@@ -44,6 +44,8 @@ Surreal.Query(
 
 ```ts
 import { SurrealQueryBuilder } from 'surrealdb'
+
+const SQB = new SurrealQueryBuilder()
 const Query = SQB.AppendCreate('user', [
   {
     key: 'name',
