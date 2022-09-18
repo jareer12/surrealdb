@@ -19,6 +19,7 @@ export interface UnauthorizedResponse {
 export interface AnyObject {
     [key: string]: any;
 }
+export declare type SurrealTypes = 'string' | 'int' | 'float' | 'object' | 'array' | 'default';
 declare class SurrealDB {
     private url;
     private options;
@@ -26,10 +27,8 @@ declare class SurrealDB {
     private encodeBase64;
     private CreateAuth;
     private CreateHeaders;
-    private PurifyQuery;
     Use(namespace: string, database: string): boolean;
     Query(query: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
-    QueryF(query: string, params?: AnyObject): Promise<SurrealResponse[] | UnauthorizedResponse>;
     GetRecord(table: string, id: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
     CreateRecord(table: string, id: string, data: {
         [key: string]: any;
@@ -40,5 +39,18 @@ declare class SurrealDB {
     GetTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
     ClearTable(table: string): Promise<SurrealResponse[] | UnauthorizedResponse>;
 }
+declare class SurrealQueryBuilder {
+    query: string;
+    constructor();
+    private StrinigfyObject;
+    private StringifyValue;
+    private StringifyType;
+    AppendCreate(name: string, keys: {
+        key: string;
+        type?: SurrealTypes;
+        value: object | string | number | SurrealTypes[];
+    }[]): string;
+}
 export default SurrealDB;
+export { SurrealQueryBuilder };
 //# sourceMappingURL=index.d.ts.map

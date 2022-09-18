@@ -23,10 +23,58 @@ const Surreal = new SurrealDB('http://127.0.0.1:8000', {
 
 ## Guide
 
+
 ```ts
-const Output = await Surreal.Query(
+// Async
+const Async = await Surreal.Query(`CREATE company:surrealdb SET name = 'SurrealDB', cofounders = [person:tobie, person:jaime];`)
+
+// Promise
+Surreal.Query(
   `CREATE company:surrealdb SET name = 'SurrealDB', cofounders = [person:tobie, person:jaime];`,
 )
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+```
 
-console.log(Output)
+## Surreal Query Builder
+
+```ts
+import { SurrealQueryBuilder } from 'surrealdb'
+const Query = SQB.AppendCreate('user', [
+  {
+    key: 'name',
+    type: 'string',
+    value: 'John',
+  },
+  {
+    key: 'age',
+    type: 'int',
+    value: 18,
+  },
+  {
+    key: 'friends',
+    type: 'array',
+    value: [
+      {
+        name: 'James',
+        age: 17,
+      },
+      {
+        name: 'Bob',
+        age: 18,
+      },
+    ],
+  },
+])
+```
+
+```sql
+CREATE user SET name = <string> 'John', age = <int> 18, friends = [ 
+  { name: 'James', age: 17 },
+  { name: 'Bob', age: 18 } 
+];
 ```

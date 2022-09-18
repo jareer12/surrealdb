@@ -25,6 +25,14 @@ export interface AnyObject {
   [key: string]: any
 }
 
+export type SurrealTypes =
+  | 'string'
+  | 'int'
+  | 'float'
+  | 'object'
+  | 'array'
+  | 'default'
+
 class SurrealDB {
   private url: string
   private options: SurrealConfigs
@@ -53,20 +61,6 @@ class SurrealDB {
     }
   }
 
-  private PurifyQuery(query: string, params: AnyObject = {}) {
-    const keys = Object.keys(params)
-
-    for (let x = 0; x < keys.length; x++) {
-      const key = keys[x]
-      const val = params[key]
-
-      query = query.replace(`$${key}`, JSON.stringify(val))
-    }
-
-    console.log(query)
-    return query
-  }
-
   Use(namespace: string, database: string) {
     this.options.namespace = namespace
     this.options.database = database
@@ -82,21 +76,6 @@ class SurrealDB {
       })
         .then((res) => res.json())
         .then((data: any) => {
-          res(data)
-        })
-        .catch((err) => {
-          rej(err)
-        })
-    })
-  }
-
-  QueryF(
-    query: string,
-    params: AnyObject = {},
-  ): Promise<SurrealResponse[] | UnauthorizedResponse> {
-    return new Promise((res, rej) => {
-      this.Query(this.PurifyQuery(query, params))
-        .then((data) => {
           res(data)
         })
         .catch((err) => {
@@ -199,4 +178,93 @@ class SurrealDB {
   }
 }
 
+class SurrealQueryBuilder {
+  query: string = ''
+  constructor() {}
+
+  private StrinigfyObject(value: any) {
+    let toStr = ''
+    const keys = Object.keys(value)
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const val = value[key]
+      if (value.hasOwnProperty(key)) {
+        toStr +=
+          `${i > 0 === true ? ' ' : ''}${key}: ${this.StringifyValue(
+            value[key],
+            typeof value[key] == 'string' ? 'string' : 'default',
+          )}` + `${i < keys.length - 1 ? ',' : ''}`
+      }
+    }
+    return `{ ${toStr} }`
+  }
+
+  private StringifyValue(value: any, type: SurrealTypes = 'default') {
+    switch (type) {
+      case 'string': {
+        return `'${value}'`
+      }
+      case 'int': {
+        return value
+      }
+      case 'object': {
+        return this.StrinigfyObject(value)
+      }
+      case 'default': {
+        return value
+      }
+      case 'array': {
+        return `[${value.map((val: any) => {
+          if (typeof val == 'object') {
+            return `${this.StrinigfyObject(val)}`
+          } else {
+            return `${this.StringifyValue(
+              val,
+              typeof val == 'string' ? 'string' : 'int',
+            )}`
+          }
+        })}]`
+      }
+    }
+  }
+
+  private StringifyType(key: any) {
+    switch (key.type) {
+      case 'object': {
+        return ''
+      }
+      case 'array': {
+        return ''
+      }
+      default: {
+        return key.type != null ? `<${key.type}> ` : ''
+      }
+    }
+  }
+
+  AppendCreate(
+    name: string,
+    keys: {
+      key: string
+      type?: SurrealTypes
+      value: object | string | number | SurrealTypes[]
+    }[],
+  ) {
+    this.query = `CREATE ${name} SET`
+
+    for (let x = 0; x < keys.length; x++) {
+      const key = keys[x]
+      this.query += ` ${key.key} = ${this.StringifyType(
+        key,
+      )}${this.StringifyValue(key.value, key?.type)}${
+        x < keys.length - 1 ? ',' : ''
+      }`
+    }
+
+    return `${this.query};`
+  }
+}
+
 export default SurrealDB
+export { SurrealQueryBuilder }
