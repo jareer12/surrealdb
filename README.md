@@ -45,7 +45,9 @@ Surreal.Query(
 ```ts
 import { SurrealQueryBuilder } from 'surrealdb'
 
-const SQB = new SurrealQueryBuilder()
+  const SQB = new SurrealQueryBuilder()
+    .UseDatabase('test')
+    .UseNamespace('test')
     .DefineParam('username', 'John Doe')
     .AppendCreate('user', [
       {
@@ -74,6 +76,8 @@ const SQB = new SurrealQueryBuilder()
       },
     ])
     .WrapTransaction('COMMIT')
+    .Combine(`# Your custom query\nSELECT * FROM user;`)
+    .Finalize()
 
 console.log(SQB.query) // OR SQB.Finalize()
 ```
