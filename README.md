@@ -3,6 +3,10 @@
 ```shell
 npm i surrealdb
 ```
+![https://img.shields.io/npm/v/surrealdb](https://img.shields.io/npm/v/surrealdb)
+![https://img.shields.io/npm/dm/surrealdb](https://img.shields.io/npm/dm/surrealdb)
+![https://img.shields.io/github/license/jareer12/surrealdb](https://img.shields.io/github/license/jareer12/surrealdb)
+![https://img.shields.io/bundlephobia/min/surrealdb](https://img.shields.io/bundlephobia/min/surrealdb)
 
 ## Quick Start
 
