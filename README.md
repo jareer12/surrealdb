@@ -12,7 +12,13 @@ surreal start --root user --pass user
 
 ```ts
 import SurrealDB from 'surrealdb'
+```
 
+```js
+const SurrealDB = require("surrealdb")
+```
+
+```ts
 const Surreal = new SurrealDB('http://127.0.0.1:8000', {
   user: 'root',
   pass: 'root',
