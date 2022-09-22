@@ -1,4 +1,7 @@
 import { SurrealQueryBuilder } from './sqb';
+export interface AnyObject {
+    [key: string]: any;
+}
 export interface SurrealConfigs {
     user: string;
     pass: string;
@@ -9,7 +12,7 @@ export interface SurrealResponse {
     time: string;
     status: 'ERR' | 'OK';
     detail: string;
-    result: any[] | null;
+    result: SurrealResult[] | null;
 }
 export interface UnauthorizedResponse {
     code: number;
@@ -17,8 +20,8 @@ export interface UnauthorizedResponse {
     description: string;
     information: string;
 }
-export interface AnyObject {
-    [key: string]: any;
+export interface SurrealResult extends AnyObject {
+    id: string;
 }
 export declare type SurrealTypesRaw = string | number | object | any[];
 export declare type SurrealTypes = 'string' | 'int' | 'float' | 'object' | 'array' | 'default';
@@ -35,7 +38,7 @@ declare class SurrealDB {
     Query(query: string): Promise<SurrealResponse[]>;
     GetRecord(table: string, id: string): Promise<SurrealResponse[]>;
     DeleteRecord(table: string, id: string): Promise<SurrealResponse[]>;
-    CreateRecord(table: string, id: string, data: {
+    CreateRecord(table: string, id: string | undefined, data: {
         [key: string]: any;
     }): Promise<SurrealResponse[]>;
     UpdateRecord(table: string, id: string, data: {

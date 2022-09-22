@@ -125,6 +125,11 @@ class SurrealQueryBuilder {
     return this
   }
 
+  Combine(query: string) {
+    this.query = `${this.query}\n\n${query}`
+    return this
+  }
+
   Finalize() {
     return this.query
   }

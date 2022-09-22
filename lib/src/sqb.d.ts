@@ -15,6 +15,7 @@ declare class SurrealQueryBuilder {
         value: object | string | number | SurrealTypes[];
     }[]): this;
     WrapTransaction(type: 'COMMIT' | 'CANCLE'): this;
+    Combine(query: string): this;
     Finalize(): string;
 }
 export { SurrealQueryBuilder };

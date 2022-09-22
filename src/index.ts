@@ -1,5 +1,10 @@
 import { SurrealQueryBuilder } from './sqb'
 import fetch from 'node-fetch'
+import uniqid from 'uniqid'
+
+export interface AnyObject {
+  [key: string]: any
+}
 
 export interface SurrealConfigs {
   user: string
@@ -12,7 +17,7 @@ export interface SurrealResponse {
   time: string
   status: 'ERR' | 'OK'
   detail: string
-  result: any[] | null
+  result: SurrealResult[] | null
 }
 
 export interface UnauthorizedResponse {
@@ -22,8 +27,8 @@ export interface UnauthorizedResponse {
   information: string
 }
 
-export interface AnyObject {
-  [key: string]: any
+export interface SurrealResult extends AnyObject {
+  id: string
 }
 
 export type SurrealTypesRaw = string | number | object | any[]
@@ -127,7 +132,7 @@ class SurrealDB {
 
   CreateRecord(
     table: string,
-    id: string,
+    id: string = uniqid(),
     data: { [key: string]: any },
   ): Promise<SurrealResponse[]> {
     return new Promise((res, rej) => {
