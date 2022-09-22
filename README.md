@@ -93,7 +93,7 @@ const SQB = new SurrealQueryBuilder()
   .Combine(`# Your custom query\nSELECT * FROM user;`)
   
 
-const RQuery = await Surreal.Query(SQB.Finalize()) // Run the query directly
+const RQuery = await Surreal.Query(SQB.Finalize()) // Run the query 
 
 console.log(SQB.query) // OR SQB.Finalize()
 console.log(RQuery)
