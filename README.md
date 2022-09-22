@@ -10,6 +10,7 @@ npm i surrealdb
 
 ## Quick Start
 
+**Basic start command**
 ```sh
 surreal start --root user --pass user
 ```
@@ -24,6 +25,7 @@ import SurrealDB from 'surrealdb'
 const SurrealDB = require("surrealdb")
 ```
 
+**Initialize connection**
 ```ts
 const Surreal = new SurrealDB('http://127.0.0.1:8000', {
   user: 'root',
@@ -57,57 +59,62 @@ Surreal.Query(
 ```ts
 import { SurrealQueryBuilder } from 'surrealdb'
 
-  const SQB = new SurrealQueryBuilder()
-    .UseDatabase('test')
-    .UseNamespace('test')
-    .DefineParam('username', 'John Doe')
-    .AppendCreate('user', [
-      {
-        key: 'name',
-        type: 'default',
-        value: '$username',
-      },
-      {
-        key: 'age',
-        type: 'int',
-        value: 18,
-      },
-      {
-        key: 'friends',
-        type: 'array',
-        value: [
-          {
-            name: 'James',
-            age: 17,
-          },
-          {
-            name: 'Bob',
-            age: 18,
-          },
-        ],
-      },
-    ])
-    .WrapTransaction('COMMIT')
-    .Combine(`# Your custom query\nSELECT * FROM user;`)
-    .Finalize()
+const SQB = new SurrealQueryBuilder()
+  .UseDatabase('test')
+  .UseNamespace('test')
+  .DefineParam('username', 'John Doe')
+  .AppendCreate('user', [
+    {
+      key: 'name',
+      type: 'default',
+      value: '$username',
+    },
+    {
+      key: 'age',
+      type: 'int',
+      value: 18,
+    },
+    {
+      key: 'friends',
+      type: 'array',
+      value: [
+        {
+          name: 'James',
+          age: 17,
+        },
+        {
+          name: 'Bob',
+          age: 18,
+        },
+      ],
+    },
+  ])
+  .WrapTransaction('COMMIT')
+  .Combine(`# Your custom query\nSELECT * FROM user;`)
+  
+
+const RQuery = await Surreal.Query(SQB.Finalize()) // Run the query directly
 
 console.log(SQB.query) // OR SQB.Finalize()
+console.log(RQuery)
 ```
 
+**Generated Query**
 ```sql
 BEGIN TRANSACTION;
-LET $username = 'John Doe';
-CREATE user SET name = $username, age = <int> 18, friends = [
-  {
-    name: 'James',
-    age: 17
-  },
-  {
-    name: 'Bob',
-    age: 18
-  }
-];
+USE DB test;
+USE NS test;LET $username = 'John Doe';
+CREATE user SET name = $username, age = <int> 18, friends = [{
+  name: 'James',
+  age: 17
+},{
+  name: 'Bob',
+  age: 18
+}];
 COMMIT TRANSACTION;
+
+# Your custom query
+SELECT * FROM user;
 ```
 
 **NOTE:** [surrealdb](https://github.com/jareer12/surrealdb) is **NOT** affiliated with [SurrealDB](https://surrealdb.com).
