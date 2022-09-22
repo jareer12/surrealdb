@@ -93,3 +93,5 @@ CREATE user SET name = $username, age = <int> 18, friends = [
 ];
 COMMIT TRANSACTION;
 ```
+
+**NOTE:** [surrealdb](https://github.com/jareer12/surrealdb) is **NOT** affiliated with [SurrealDB](https://surrealdb.com).
