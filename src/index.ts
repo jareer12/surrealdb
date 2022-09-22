@@ -39,10 +39,12 @@ export type SurrealTypes =
 class SurrealDB {
   private url: string
   private options: SurrealConfigs
+  DeleteTable: (table: string) => Promise<SurrealResponse[]>
 
   constructor(url: string, options: SurrealConfigs) {
     this.url = url
     this.options = options
+    this.DeleteTable = this.ClearTable
   }
 
   private encodeBase64(string: string): string {
@@ -62,6 +64,10 @@ class SurrealDB {
       Db: this.options.database,
       Ns: this.options.namespace,
     }
+  }
+
+  GetConfig() {
+    return this.options
   }
 
   Use(namespace: string, database: string) {
@@ -91,6 +97,22 @@ class SurrealDB {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}/${id}`, {
         method: 'GET',
+        headers: this.CreateHeaders(),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  DeleteRecord(table: string, id: string): Promise<SurrealResponse[]> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}/${id}`, {
+        method: 'DELETE',
         headers: this.CreateHeaders(),
       })
         .then((res) => res.json())
@@ -149,6 +171,26 @@ class SurrealDB {
     return new Promise((res, rej) => {
       fetch(`${this.url}/key/${table}`, {
         method: 'GET',
+        headers: this.CreateHeaders(),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          res(data)
+        })
+        .catch((err) => {
+          rej(err)
+        })
+    })
+  }
+
+  CreateTable(
+    table: string,
+    data: { [key: string]: any },
+  ): Promise<SurrealResponse[]> {
+    return new Promise((res, rej) => {
+      fetch(`${this.url}/key/${table}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
         headers: this.CreateHeaders(),
       })
         .then((res) => res.json())

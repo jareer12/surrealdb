@@ -25,13 +25,16 @@ export declare type SurrealTypes = 'string' | 'int' | 'float' | 'object' | 'arra
 declare class SurrealDB {
     private url;
     private options;
+    DeleteTable: (table: string) => Promise<SurrealResponse[]>;
     constructor(url: string, options: SurrealConfigs);
     private encodeBase64;
     private CreateAuth;
     private CreateHeaders;
+    GetConfig(): SurrealConfigs;
     Use(namespace: string, database: string): boolean;
     Query(query: string): Promise<SurrealResponse[]>;
     GetRecord(table: string, id: string): Promise<SurrealResponse[]>;
+    DeleteRecord(table: string, id: string): Promise<SurrealResponse[]>;
     CreateRecord(table: string, id: string, data: {
         [key: string]: any;
     }): Promise<SurrealResponse[]>;
@@ -39,6 +42,9 @@ declare class SurrealDB {
         [key: string]: any;
     }): Promise<SurrealResponse[]>;
     GetTable(table: string): Promise<SurrealResponse[]>;
+    CreateTable(table: string, data: {
+        [key: string]: any;
+    }): Promise<SurrealResponse[]>;
     ClearTable(table: string): Promise<SurrealResponse[]>;
 }
 export default SurrealDB;
