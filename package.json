@@ -1,6 +1,6 @@
 {
   "name": "surrealdb",
-  "main": "./src/index.js",
+  "main": "./lib/src/index.js",
   "version": "0.0.1-beta.3.6",
   "description": "SurrealDB REST API wrapper.",
   "license": "MIT",
