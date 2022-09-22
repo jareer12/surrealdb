@@ -1,11 +1,11 @@
 {
   "name": "surrealdb",
+  "main": "./src/index.js",
   "version": "0.0.1-beta.3.5",
-  "main": "./lib/src/index.js",
-  "description": "SureralDB REST API wrapper.",
+  "description": "SurrealDB REST API wrapper.",
   "license": "MIT",
   "files": [
-    "./lib"
+    "./lib/src"
   ],
   "scripts": {
     "build": "tsc -p .",
@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
-    "stringify-object": "^3.3.0",
-    "surrealdb.js": "^0.3.1"
+    "stringify-object": "^3.3.0"
   }
 }
