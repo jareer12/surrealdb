@@ -1,5 +1,7 @@
 # SurrealDB Node.js
 
+- [Documentation](./docs/README.MD)
+
 ```shell
 npm i surrealdb
 ```
