@@ -17,13 +17,11 @@ npm i surrealdb
 surreal start --root user --pass user
 ```
 
-**ES6**
 ```ts
+// ES6
 import SurrealDB from 'surrealdb'
-```
 
-**Node.js**
-```js
+// Node.js
 const SurrealDB = require("surrealdb")
 ```
 
